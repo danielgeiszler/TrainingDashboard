@@ -1,0 +1,43 @@
+name: Deploy Shiny App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      # Step 3: Install rsconnect
+      - name: Install rsconnect
+        run: |
+          python -m pip install --upgrade pip
+          pip install rsconnect-python
+
+      # Step 4: Authenticate with rsconnect
+      - name: Authenticate with rsconnect
+        run: |
+          rsconnect add \
+            --account ${{ secrets.RSCONNECT_ACCOUNT }} \
+            --name ${{ secrets.RSCONNECT_NAME }} \
+            --token ${{ secrets.RSCONNECT_TOKEN }} \
+            --secret ${{ secrets.RSCONNECT_SECRET }}
+
+      # Step 5: Deploy the app
+      - name: Deploy the app
+        run: |
+          rsconnect deploy shiny . \
+            --name ${{ secrets.RSCONNECT_NAME }} \
+            --title trainingdashboard
