@@ -3,7 +3,7 @@ import shiny
 from shiny import App, render, ui, reactive
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+import Plotter
 import DashboardUI
 from DashboardUI import get_ui, get_ui_preload
 from DataManager import DataManager
@@ -200,20 +200,11 @@ def server(input, output, session):
     @render.plot
     def weight_plot():
         filtered_df = filter_data()
-        print("Weight")
-        print(filtered_df)
         if filtered_df.empty:
             return
         # Aggregate data by 'Cycle'
         df_grouped = filtered_df.groupby('Cycle')['Weight'].mean().reset_index()
-        print(df_grouped)
-        plt.figure(figsize=(10, 5))
-        plt.plot(df_grouped['Cycle'], df_grouped['Weight'], marker='o', linestyle='-')
-        plt.title(f"Average Weight Over Cycles for {input.exercise_select()}")
-        plt.xlabel('Cycle')
-        plt.ylabel('Weight')
-        plt.grid(True)
-        plt.tight_layout()
+        Plotter.weight_plot(df_grouped, input.exercise_select())
 
     @output
     @render.plot
@@ -223,13 +214,7 @@ def server(input, output, session):
             return
         # Aggregate data by 'Cycle'
         df_grouped = filtered_df.groupby('Cycle')['Reps'].mean().reset_index()
-        plt.figure(figsize=(10, 5))
-        plt.plot(df_grouped['Cycle'], df_grouped['Reps'], marker='s', color='orange', linestyle='-')
-        plt.title(f"Average Reps Over Cycles for {input.exercise_select()}")
-        plt.xlabel('Cycle')
-        plt.ylabel('Reps')
-        plt.grid(True)
-        plt.tight_layout()
+        Plotter.reps_plot(df_grouped, input.exercise_select())
 
     @output
     @render.plot
@@ -244,14 +229,7 @@ def server(input, output, session):
             return
         # Aggregate total weight moved by cycle
         df_grouped = filtered_df.groupby('Cycle')['TotalWeightMoved'].sum().reset_index()
-
-        plt.figure(figsize=(10, 5))
-        plt.plot(df_grouped['Cycle'], df_grouped['TotalWeightMoved'], marker='o', linestyle='-')
-        plt.title(f"Total Weight Moved Over Cycles for {input.exercise_select()}")
-        plt.xlabel('Cycle')
-        plt.ylabel('Total Weight Moved')
-        plt.grid(True, axis='y')
-        plt.tight_layout()
+        Plotter.total_weight_moved_plot(df_grouped, input.exercise_select())
 
     # Dynamic Plots UI based on selected charts
     @output
