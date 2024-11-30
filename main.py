@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import Plotter
 import DashboardUI
-from DashboardUI import get_ui, get_ui_preload
+from DashboardUI import get_ui
 from DataManager import DataManager
 
 
@@ -30,8 +30,6 @@ data = load_data()
 #Click Publish and confirm.
 
 app_ui = get_ui(data)
-
-#app_ui = get_ui_preload()
 
 # Define the server logic
 def server(input, output, session):
@@ -93,7 +91,7 @@ def server(input, output, session):
     @reactive.event(input.load_data, ignore_none=True)
     def handle_load_data():
         data_manager.load_data_from_url(input.data_url())
-        DashboardUI.get_main_ui(data_manager)
+        #DashboardUI.get_main_ui(data_manager)
         update_ui()
 
     # Reactive expression to load default data when 'Load Default Data' button is clicked
