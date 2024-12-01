@@ -7,6 +7,7 @@ import Plotter
 import DashboardUI
 from DashboardUI import get_ui
 from DataManager import DataManager
+import os
 
 
 
@@ -323,4 +324,13 @@ app = App(app_ui, server)
 
 # Run the app if this script is executed directly
 if __name__ == "__main__":
-    app.run()
+    port = os.getenv("PORT")
+    if port:
+        print("here")
+        from shiny import run_app
+        # Deployment mode
+        port = int(port)
+        run_app(app, host="0.0.0.0", port=port)
+    else:
+        # Local development mode
+        app.run()

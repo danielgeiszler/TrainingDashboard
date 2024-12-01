@@ -2,3 +2,4 @@ shiny
 pandas
 matplotlib
 seaborn
+os
