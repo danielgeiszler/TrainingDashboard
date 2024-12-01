@@ -61,6 +61,40 @@ class DataManager:
         df_grouped = filtered_df.groupby('Cycle')[['Weight', 'Reps']].mean().reset_index()
         return df_grouped
 
+    def filter_data_summary_plot(self, day):
+        df = self.data.get()
+        df = df[df["Day"] == day]
+        # Step 1: Calculate baseline weight and reps for every exercise during Cycle 1
+        baseline = (
+            df[df["Cycle"] == 1]
+            .groupby("Exercise")[["Weight", "Reps"]]
+            .mean()
+            .rename(columns=lambda x: f"Baseline_{x}")
+            .reset_index()
+        )
+
+        # Step 2: Calculate improvement in Weight and Reps over baseline as a percentage for every set
+        df = df.merge(baseline, on="Exercise", how="left")
+        df["Weight_Improvement"] = (df["Weight"] - df["Baseline_Weight"]) / df["Baseline_Weight"] * 100
+        df["Reps_Improvement"] = (df["Reps"] - df["Baseline_Reps"]) / df["Baseline_Reps"] * 100
+
+        # Step 3: Calculate average improvements across sets for Weight and Reps for each exercise and cycle
+        average_improvement_df = (
+            df.groupby(["Exercise", "Cycle"])[["Weight_Improvement", "Reps_Improvement"]]
+            .mean()
+            .reset_index()
+        )
+
+        # Step 4: Take the maximum of average weight improvement or reps improvement as the true improvement
+        average_improvement_df["True_Improvement"] = average_improvement_df[
+            ["Weight_Improvement", "Reps_Improvement"]
+        ].max(axis=1)
+
+        # Step 5: Final Output
+        print(average_improvement_df)
+
+        return average_improvement_df
+
     def filter_data(self, day, exercise, cycle_range):
         if self.data.get() is None or day is None or exercise is None or cycle_range is None:
             return pd.DataFrame()

@@ -38,6 +38,15 @@ def get_ui(data):
 def get_main_content_ui(data_manager):
     return ui.navset_pill(
         ui.nav_panel(
+            "Summary",
+            ui.input_select(
+                id='day_select_change',
+                label='Select Day:',
+                choices=data_manager.get_days()
+            ),
+            ui.output_plot('summary_plot')
+        ),
+        ui.nav_panel(
             "Exercise Analysis",
             ui.input_select(
                 id='day_select',
@@ -65,7 +74,7 @@ def get_main_content_ui(data_manager):
                 selected=['progress_plot', 'weight_plot', 'reps_plot', 'total_weight_plot']
             ),
             ui.output_ui('plots_ui'),
-            ui.output_table("data_table")
+            ui.output_table("data_table") #todo remove
         ),
         ui.nav_panel(
             "Exercise Change Analysis",

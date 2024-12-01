@@ -196,6 +196,13 @@ def server(input, output, session):
             value=input.cycle_slider()
         )
 
+
+    @output
+    @render.plot
+    def summary_plot():
+        df = data_manager.filter_data_summary_plot(input.day_select_change())
+        Plotter.summary_plot(df)
+
     @output
     @render.plot
     def progress_plot():
@@ -327,10 +334,11 @@ def server(input, output, session):
         ax.invert_yaxis()  # Highest change on top
         plt.tight_layout()
 
+
 # Create the Shiny app
 app = App(app_ui, server)
 
-# Run the app if this script is executed directly
+
 if __name__ == "__main__":
     port = os.getenv("PORT")
     if port:

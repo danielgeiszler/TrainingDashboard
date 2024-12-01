@@ -2,6 +2,22 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
+def summary_plot(df):
+    ax = sns.lineplot(
+        data=df,
+        x="Cycle",
+        y="True_Improvement",
+        hue="Exercise",
+        marker='o',
+        estimator=None,
+        errorbar=None
+    )
+    x_ticks = range(df["Cycle"].min(), df["Cycle"].max() + 1)
+    plt.xticks(ticks=x_ticks)
+    plt.xlabel('cycle')
+    plt.ylabel('improvement (%)')
+    plt.title(f'overall improvement')
+
 def progress_plot(df, exercise_name):
     print(df)
     ax = sns.lineplot(
