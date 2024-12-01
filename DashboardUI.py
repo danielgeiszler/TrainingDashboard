@@ -57,11 +57,12 @@ def get_main_content_ui(data_manager):
                 id='charts_select',
                 label='Select Charts to Display:',
                 choices={
+                    'progress_plot': 'Progress Plot',
                     'weight_plot': 'Weight Plot',
                     'reps_plot': 'Reps Plot',
                     'total_weight_plot': 'Total Weight Moved Plot'
                 },
-                selected=['weight_plot', 'reps_plot', 'total_weight_plot']
+                selected=['progress_plot', 'weight_plot', 'reps_plot', 'total_weight_plot']
             ),
             ui.output_ui('plots_ui'),
             ui.output_table("data_table")

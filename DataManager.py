@@ -50,6 +50,17 @@ class DataManager:
         else:
             return 0, 1
 
+    def filter_data_progress_plot(self, day, exercise, cycle_range):
+        df = self.data.get()
+        filtered_df = df[
+            (df['Day'] == day) &
+            (df['Exercise'] == exercise) &
+            (df['Cycle'] >= cycle_range[0]) &
+            (df['Cycle'] <= cycle_range[1])
+            ]
+        df_grouped = filtered_df.groupby('Cycle')[['Weight', 'Reps']].mean().reset_index()
+        return df_grouped
+
     def filter_data(self, day, exercise, cycle_range):
         if self.data.get() is None or day is None or exercise is None or cycle_range is None:
             return pd.DataFrame()

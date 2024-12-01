@@ -3,6 +3,7 @@ import shiny
 from shiny import App, render, ui, reactive
 import matplotlib.pyplot as plt
 import seaborn as sns
+
 import Plotter
 import DashboardUI
 from DashboardUI import get_ui
@@ -197,6 +198,12 @@ def server(input, output, session):
 
     @output
     @render.plot
+    def progress_plot():
+        df = data_manager.filter_data_progress_plot(input.day_select(), input.exercise_select(), input.cycle_slider())
+        Plotter.progress_plot(df, input.exercise_select())
+
+    @output
+    @render.plot
     def weight_plot():
         filtered_df = filter_data()
         if filtered_df.empty:
@@ -236,7 +243,8 @@ def server(input, output, session):
     def plots_ui():
         selected_charts = input.charts_select()
         plot_outputs = []
-
+        if 'progress_plot' in selected_charts:
+            plot_outputs.append(ui.output_plot('progress_plot'))
         if 'weight_plot' in selected_charts:
             plot_outputs.append(ui.output_plot('weight_plot'))
         if 'reps_plot' in selected_charts:
