@@ -6,31 +6,38 @@ import seaborn as sns
 
 def get_ui(data):
     app_ui = ui.page_fluid(
-        ui.h2("Workout Data Analysis"),
-        ui.input_text(
-            id='data_url',
-            label='Enter Data URL:',
-            value='',
-            placeholder='Paste your CSV data URL here'
-        ),
-        ui.row(
-            ui.column(
-                4,
-                ui.input_action_button(
-                    id='load_data',
-                    label='Load Data'
-                )
+        ui.h2("Training Dashboard"),
+        ui.h4("for workout data analysis"),
+        ui.column(
+            5,
+            ui.input_text(
+                id='data_url',
+                label='Enter Data URL:',
+                value='',
+                placeholder='Paste your CSV data URL here',
+                width='100%'
             ),
-            ui.column(
-                4,
-                ui.input_action_button(
-                    id='load_default_data',
-                    label='Load Default Data'
+            ui.row(
+                ui.column(
+                    6,
+                    ui.input_action_button(
+                        id='load_data',
+                        label='Load Data',
+                        width = '100%'
+                    )
+                ),
+                ui.column(
+                    6,
+                    ui.input_action_button(
+                        id='load_default_data',
+                        label='Load Default Data',
+                        width = '100%'
+                    )
                 )
             )
         ),
-        ui.hr(),
-        ui.output_ui('main_content')
+    ui.hr(),
+    ui.output_ui('main_content')
     )
     return app_ui
 
