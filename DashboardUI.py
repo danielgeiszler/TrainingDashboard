@@ -3,41 +3,47 @@ import shiny
 from shiny import App, render, ui
 import matplotlib.pyplot as plt
 import seaborn as sns
+import shinyswatch
 
 def get_ui(data):
+
     app_ui = ui.page_fluid(
-        ui.h2("Training Dashboard"),
-        ui.h4("for workout data analysis"),
-        ui.column(
-            5,
-            ui.input_text(
-                id='data_url',
-                label='Enter Data URL:',
-                value='',
-                placeholder='Paste your CSV data URL here',
-                width='100%'
-            ),
-            ui.row(
-                ui.column(
-                    6,
-                    ui.input_action_button(
-                        id='load_data',
-                        label='Load Data',
-                        width = '100%'
-                    )
+        ui.div(
+            ui.h2("Training Dashboard", class_="text-light"),
+            ui.h4("for workout data analysis", class_="text-light"),
+            ui.column(
+                5,
+                ui.input_text(
+                    id='data_url',
+                    label=ui.h6('Enter Data URL:', class_="text-light"),
+                    value='',
+                    placeholder='Paste your CSV data URL here',
+                    width='100%'
                 ),
-                ui.column(
-                    6,
-                    ui.input_action_button(
-                        id='load_default_data',
-                        label='Load Default Data',
-                        width = '100%'
+                ui.row(
+                    ui.column(
+                        6,
+                        ui.input_action_button(
+                            id='load_data',
+                            label='Load Data',
+                            width = '100%'
+                        )
+                    ),
+                    ui.column(
+                        6,
+                        ui.input_action_button(
+                            id='load_default_data',
+                            label='Load Default Data',
+                            width = '100%'
+                        )
                     )
                 )
-            )
+            ),
+            style="background-color: #008cba; padding: 20px; border-radius: 5px;"  # Add background color and padding
         ),
-    ui.hr(),
-    ui.output_ui('main_content')
+        ui.hr(),
+        ui.output_ui('main_content'),
+    theme=shinyswatch.theme.yeti
     )
     return app_ui
 
@@ -108,7 +114,7 @@ def get_main_content_ui(data_manager):
         )
     )
 
-def get_main_ui(data_manager):
+def get_main_ui(data_manager): #todo delete
     if not data_manager.data_loaded():
         return ui.h4("Please load data to proceed.")
     else:
